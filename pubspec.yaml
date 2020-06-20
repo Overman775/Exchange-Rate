@@ -17,6 +17,7 @@ dependencies:
       url: git://github.com/hivedb/hive.git
       path: hive_flutter
   equatable: ^1.2.0
+  http: ^0.12.1
 
 dev_dependencies:
   hive_generator:
