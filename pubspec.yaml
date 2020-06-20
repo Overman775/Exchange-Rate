@@ -23,6 +23,7 @@ dev_dependencies:
     git:
       url: git://github.com/hivedb/hive.git
       path: hive_generator
+  lint: ^1.2.0
   
   flutter_test:
     sdk: flutter
