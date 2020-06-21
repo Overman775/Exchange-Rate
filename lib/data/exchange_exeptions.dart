@@ -11,6 +11,8 @@ abstract class ExchangeRepositoryException extends Equatable
 
   @override
   bool get stringify => true;
+
+  String get errorString => '$_prefix $_message';
 }
 
 class FetchDataException extends ExchangeRepositoryException {

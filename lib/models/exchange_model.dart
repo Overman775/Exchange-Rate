@@ -8,15 +8,17 @@ class Excahnge extends Equatable {
   );
 
   factory Excahnge.fromJson(Map<String, dynamic> json) {
-    return Excahnge(
-        json['base'] as String,
-        DateTime.parse(json['date'] as String),
-        json['rates'] as Map<String, double>);
+    final Map<String, dynamic> _ratesObj =
+        json['rates'] as Map<String, dynamic>;
+    final Map<String, double> _ratesCast = _ratesObj.cast<String, double>();
+
+    return Excahnge(json['base'] as String,
+        DateTime.parse(json['date'] as String), _ratesCast.entries.toList());
   }
 
   final String base;
   final DateTime date;
-  final Map<String, double> rates;
+  final List<MapEntry<String, double>> rates;
 
   @override
   List<Object> get props => <dynamic>[base, date, rates];

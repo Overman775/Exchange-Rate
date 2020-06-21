@@ -5,12 +5,7 @@ abstract class ExchangeEvent extends Equatable {
 }
 
 class GetExchange extends ExchangeEvent {
-  @override
-  List<Object> get props => <dynamic>[];
-}
-
-class GetDetailedExchange extends ExchangeEvent {
-  const GetDetailedExchange(this.base);
+  const GetExchange(this.base);
 
   final String base;
 

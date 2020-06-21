@@ -4,23 +4,24 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'package:exchange_rate/data/exchange_exeptions.dart';
-import 'package:exchange_rate/models/exchange_model.dart';
+import '../data/exchange_exeptions.dart';
+import '../models/exchange_model.dart';
 
 abstract class ExchangeRepository {
-  Future<Excahnge> fetchExchange(String cityName);
-  Future<Excahnge> fetchDetailedExchange(String cityName);
+  Future<Excahnge> fetchExchange({String base});
+  Future<Excahnge> fetchDetailedExchange({String base});
 }
 
 class ExchangeRepositoryECB implements ExchangeRepository {
   //European Central Bank
-  final String _baseUrl = 'https://api.exchangeratesapi.io/';
+  final String _baseUrl = 'https://api.exchangeratesapi.io';
 
   @override
-  Future<Excahnge> fetchExchange(String base) async {
+  Future<Excahnge> fetchExchange({String base = 'USD'}) async {
     Map<String, dynamic> responseJson;
     try {
-      final http.Response response = await http.get('$_baseUrl/last');
+      final http.Response response =
+          await http.get('$_baseUrl/latest?base=$base');
       responseJson = _returnResponse(response) as Map<String, dynamic>;
     } on SocketException {
       throw const FetchDataException('No Internet connection');
@@ -29,7 +30,7 @@ class ExchangeRepositoryECB implements ExchangeRepository {
   }
 
   @override
-  Future<Excahnge> fetchDetailedExchange(String base) async {
+  Future<Excahnge> fetchDetailedExchange({String base}) async {
     Map<String, dynamic> responseJson;
     try {
       final http.Response response = await http.get(_baseUrl);
