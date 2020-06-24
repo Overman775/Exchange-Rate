@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:exchange_rate/widgets/dot_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,6 +125,9 @@ class Header extends StatelessWidget {
 
   final List<String> bases = <String>['USD', 'EUR', 'GBP'];
 
+  static const Duration _kDuration = Duration(milliseconds: 300);
+  static const Cubic _kCurve = Curves.ease;
+
   final PageController _controller = PageController(
     initialPage: 0,
   );
@@ -188,7 +192,28 @@ class Header extends StatelessWidget {
                           onPressed: () {})
                     ],
                   ),
-                )
+                ),
+                Positioned(
+                    bottom: 16.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: DotsIndicator(
+                          controller: _controller,
+                          itemCount: 3,
+                          indexPage: 0,
+                          onPageSelected: (int page) {
+                            _controller.animateToPage(
+                              page,
+                              duration: _kDuration,
+                              curve: _kCurve,
+                            );
+                          },
+                        ),
+                      ),
+                    ))
               ],
             ),
           ),
