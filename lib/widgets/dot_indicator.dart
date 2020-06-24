@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 
 class DotsIndicator extends AnimatedWidget {
   const DotsIndicator({
-    this.controller,
-    this.itemCount,
+    @required this.controller,
+    @required this.itemCount,
     this.color = Colors.white,
     final this.size = 8.0,
     final this.zoom = 2.0,
