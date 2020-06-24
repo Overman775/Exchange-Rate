@@ -113,14 +113,18 @@ class ExchangedSliverContent extends StatelessWidget {
         itemExtent: 60.0,
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return InkWell(
-              onTap: () => goToDetail(context, data.exchange.rates[index].key),
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.black.withOpacity(0.1)),
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
+            return Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.black.withOpacity(0.1)),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: InkWell(
+                onTap: () =>
+                    goToDetail(context, data.exchange.rates[index].key),
+                splashColor: Style.colorAccent.withOpacity(0.3),
+                highlightColor: Style.colorAccent.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16.0),
                 child: ListTile(
                   title: Text(data.exchange.rates[index].key),
                   trailing:
