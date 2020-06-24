@@ -25,11 +25,13 @@ class DotsIndicator extends AnimatedWidget {
   final Duration duration;
   final Curve curve;
 
+  num get curPage => controller.page ?? controller.initialPage;
+
   Widget _buildDot(int index) {
     final double selectedness = Curves.easeOut.transform(
       max(
         0.0,
-        1.0 - ((controller.page ?? controller.initialPage) - index).abs(),
+        1.0 - (curPage - index).abs(),
       ),
     );
     final double curentZoom = 1.0 + (zoom - 1.0) * selectedness;
@@ -52,13 +54,11 @@ class DotsIndicator extends AnimatedWidget {
     );
   }
 
-  void _onDotTap(int page) {
-    controller.animateToPage(
-      page,
-      duration: duration,
-      curve: curve,
-    );
-  }
+  void _onDotTap(int page) => controller.animateToPage(
+        page,
+        duration: duration,
+        curve: curve,
+      );
 
   @override
   Widget build(BuildContext context) {

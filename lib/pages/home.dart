@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:exchange_rate/widgets/dot_indicator.dart';
+import 'package:exchange_rate/widgets/page_view_arrows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,12 +126,11 @@ class Header extends StatelessWidget {
 
   final List<String> bases = <String>['USD', 'EUR', 'GBP'];
 
-  static const Duration _kDuration = Duration(milliseconds: 300);
-  static const Cubic _kCurve = Curves.ease;
-
   final PageController _controller = PageController(
     initialPage: 0,
   );
+
+  final Curve _pageCurve = Curves.fastOutSlowIn;
 
   @override
   Widget build(BuildContext context) {
@@ -172,25 +172,10 @@ class Header extends StatelessWidget {
                     }),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                          iconSize: 30,
-                          icon: Icon(
-                            Icons.arrow_left,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {}),
-                      const Spacer(),
-                      IconButton(
-                          iconSize: 30,
-                          icon: Icon(
-                            Icons.arrow_right,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {})
-                    ],
+                  child: PageViewArrows(
+                    controller: _controller,
+                    itemCount: bases.length,
+                    curve: _pageCurve,
                   ),
                 ),
                 Positioned(
@@ -202,15 +187,8 @@ class Header extends StatelessWidget {
                       child: Center(
                         child: DotsIndicator(
                           controller: _controller,
-                          itemCount: 3,
-                          indexPage: 0,
-                          onPageSelected: (int page) {
-                            _controller.animateToPage(
-                              page,
-                              duration: _kDuration,
-                              curve: _kCurve,
-                            );
-                          },
+                          itemCount: bases.length,
+                          curve: _pageCurve,
                         ),
                       ),
                     ))
