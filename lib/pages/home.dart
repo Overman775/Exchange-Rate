@@ -94,19 +94,22 @@ class ExchangedSliverContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFixedExtentList(
-      itemExtent: 60.0,
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Card(
-            child: ListTile(
-              title: Text(data.exchange.rates[index].key),
-              trailing:
-                  Text(data.exchange.rates[index].value.toStringAsFixed(3)),
-            ),
-          );
-        },
-        childCount: data.exchange.rates.length,
+    return SliverPadding(
+      padding: const EdgeInsets.all(16.0),
+      sliver: SliverFixedExtentList(
+        itemExtent: 60.0,
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return Card(
+              child: ListTile(
+                title: Text(data.exchange.rates[index].key),
+                trailing:
+                    Text(data.exchange.rates[index].value.toStringAsFixed(3)),
+              ),
+            );
+          },
+          childCount: data.exchange.rates.length,
+        ),
       ),
     );
   }
