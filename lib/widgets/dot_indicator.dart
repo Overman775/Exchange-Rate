@@ -7,23 +7,23 @@ class DotsIndicator extends AnimatedWidget {
   const DotsIndicator({
     this.controller,
     this.itemCount,
-    this.indexPage,
-    this.onPageSelected,
     this.color = Colors.white,
+    final this.size = 8.0,
+    final this.zoom = 2.0,
+    final this.spacing = 25.0,
+    this.duration = const Duration(milliseconds: 300),
+    this.curve = Curves.ease,
   }) : super(listenable: controller);
 
   final PageController controller;
 
   final int itemCount;
-  final ValueChanged<int> onPageSelected;
-
   final Color color;
-
-  static const double _kDotSize = 8.0;
-  static const double _kMaxZoom = 2.0;
-  static const double _kDotSpacing = 25.0;
-
-  final int indexPage;
+  final double size;
+  final double zoom;
+  final double spacing;
+  final Duration duration;
+  final Curve curve;
 
   Widget _buildDot(int index) {
     final double selectedness = Curves.easeOut.transform(
@@ -32,23 +32,31 @@ class DotsIndicator extends AnimatedWidget {
         1.0 - ((controller.page ?? controller.initialPage) - index).abs(),
       ),
     );
-    final double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
+    final double curentZoom = 1.0 + (zoom - 1.0) * selectedness;
     return Container(
-      width: _kDotSpacing,
-      height: _kDotSize * _kMaxZoom,
+      width: spacing,
+      height: size * zoom,
       child: Center(
         child: GestureDetector(
-          onTap: () => onPageSelected(index),
+          onTap: () => _onDotTap(index),
           child: Material(
             color: color,
             type: MaterialType.circle,
             child: Container(
-              width: _kDotSize * zoom,
-              height: _kDotSize * zoom,
+              width: size * curentZoom,
+              height: size * curentZoom,
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _onDotTap(int page) {
+    controller.animateToPage(
+      page,
+      duration: duration,
+      curve: curve,
     );
   }
 
