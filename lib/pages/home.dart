@@ -17,10 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Widget buildLoading() {
-    return const Expanded(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 
@@ -58,48 +56,59 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: <Widget>[
-        Header(),
+      body: CustomScrollView(slivers: <Widget>[
+        SliverAppBar(
+          expandedHeight: 250.0,
+          floating: true,
+          elevation: 0,
+          backgroundColor: Style.colorPrimary,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Header(),
+          ),
+        ),
         BlocBuilder<ExchangeBloc, ExchangeState>(
           builder: (BuildContext context, ExchangeState state) {
+            Widget result;
             if (state is ExchangeLoading) {
-              return buildLoading();
+              result = buildLoading();
             } else if (state is ExchangeLoaded) {
-              return ExchangedContent(state);
+              return ExchangedSliverContent(state);
             } else if (state is ExchangeError) {
-              return buildError(context, state);
+              result = buildError(context, state);
+            } else {
+              result = const SizedBox.shrink();
             }
-            return const SizedBox.shrink();
+            return SliverFillRemaining(
+                hasScrollBody: false, fillOverscroll: true, child: result);
           },
         ),
-      ],
-    ));
+      ]),
+    );
   }
 }
 
-class ExchangedContent extends StatelessWidget {
-  const ExchangedContent(this.data, {Key key}) : super(key: key);
+class ExchangedSliverContent extends StatelessWidget {
+  const ExchangedSliverContent(this.data, {Key key}) : super(key: key);
 
   final ExchangeLoaded data;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            physics: const BouncingScrollPhysics(),
-            itemCount: data.exchange.rates.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                child: ListTile(
-                  title: Text(data.exchange.rates[index].key),
-                  trailing:
-                      Text(data.exchange.rates[index].value.toStringAsFixed(3)),
-                ),
-              );
-            }));
+    return SliverFixedExtentList(
+      itemExtent: 60.0,
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Card(
+            child: ListTile(
+              title: Text(data.exchange.rates[index].key),
+              trailing:
+                  Text(data.exchange.rates[index].value.toStringAsFixed(3)),
+            ),
+          );
+        },
+        childCount: data.exchange.rates.length,
+      ),
+    );
   }
 }
 
