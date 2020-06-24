@@ -56,33 +56,35 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[
-        SliverAppBar(
-          expandedHeight: 250.0,
-          floating: true,
-          elevation: 0,
-          backgroundColor: Style.colorPrimary,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Header(),
-          ),
-        ),
-        BlocBuilder<ExchangeBloc, ExchangeState>(
-          builder: (BuildContext context, ExchangeState state) {
-            Widget result;
-            if (state is ExchangeLoading) {
-              result = buildLoading();
-            } else if (state is ExchangeLoaded) {
-              return ExchangedSliverContent(state);
-            } else if (state is ExchangeError) {
-              result = buildError(context, state);
-            } else {
-              result = const SizedBox.shrink();
-            }
-            return SliverFillRemaining(
-                hasScrollBody: false, fillOverscroll: true, child: result);
-          },
-        ),
-      ]),
+      body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 250.0,
+              floating: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Header(),
+              ),
+            ),
+            BlocBuilder<ExchangeBloc, ExchangeState>(
+              builder: (BuildContext context, ExchangeState state) {
+                Widget result;
+                if (state is ExchangeLoading) {
+                  result = buildLoading();
+                } else if (state is ExchangeLoaded) {
+                  return ExchangedSliverContent(state);
+                } else if (state is ExchangeError) {
+                  result = buildError(context, state);
+                } else {
+                  result = const SizedBox.shrink();
+                }
+                return SliverFillRemaining(
+                    hasScrollBody: false, fillOverscroll: true, child: result);
+              },
+            ),
+          ]),
     );
   }
 }
@@ -95,7 +97,7 @@ class ExchangedSliverContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverFixedExtentList(
         itemExtent: 60.0,
         delegate: SliverChildBuilderDelegate(
