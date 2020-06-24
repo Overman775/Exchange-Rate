@@ -151,6 +151,7 @@ class Header extends StatelessWidget {
                   Style.colorPrimary,
                 ])),
             child: Stack(
+              alignment: Alignment.center,
               children: <Widget>[
                 PageView.builder(
                     scrollDirection: Axis.horizontal,
@@ -165,6 +166,29 @@ class Header extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return CurrencyItem(bases[index]);
                     }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                          iconSize: 30,
+                          icon: Icon(
+                            Icons.arrow_left,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {}),
+                      const Spacer(),
+                      IconButton(
+                          iconSize: 30,
+                          icon: Icon(
+                            Icons.arrow_right,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {})
+                    ],
+                  ),
+                )
               ],
             ),
           ),
