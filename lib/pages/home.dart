@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:exchange_rate/pages/detail.dart';
 import 'package:exchange_rate/widgets/dot_indicator.dart';
 import 'package:exchange_rate/widgets/page_view_arrows.dart';
 import 'package:flutter/material.dart';
@@ -96,6 +97,14 @@ class ExchangedSliverContent extends StatelessWidget {
 
   final ExchangeLoaded data;
 
+  void goToDetail(BuildContext context, String base) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<DetailPage>(
+          builder: (BuildContext context) => DetailPage(base)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
@@ -104,11 +113,19 @@ class ExchangedSliverContent extends StatelessWidget {
         itemExtent: 60.0,
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return Card(
-              child: ListTile(
-                title: Text(data.exchange.rates[index].key),
-                trailing:
-                    Text(data.exchange.rates[index].value.toStringAsFixed(3)),
+            return InkWell(
+              onTap: () => goToDetail(context, data.exchange.rates[index].key),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.black.withOpacity(0.1)),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: ListTile(
+                  title: Text(data.exchange.rates[index].key),
+                  trailing:
+                      Text(data.exchange.rates[index].value.toStringAsFixed(3)),
+                ),
               ),
             );
           },
