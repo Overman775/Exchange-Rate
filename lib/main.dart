@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/exchange_bloc.dart';
+import 'bloc/currency/bloc/currency_bloc.dart';
+import 'bloc/exchange/exchange_bloc.dart';
 import 'data/exchange_repository.dart';
 import 'pages/home.dart';
 import 'style.dart';
@@ -13,21 +14,28 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Style.colorPrimary,
-        accentColor: Style.colorAccent,
-        disabledColor: Style.colorSubText,
-        backgroundColor: Colors.white,
-        textTheme: Typography.material2018()
-            .englishLike
-            .apply(bodyColor: Style.colorText),
-      ),
-      home: BlocProvider<ExchangeBloc>(
-        create: (BuildContext context) => ExchangeBloc(ExchangeRepositoryECB()),
-        child: const Home(),
-      ),
-    );
+    return MultiBlocProvider(
+        providers: <BlocProvider<dynamic>>[
+          BlocProvider<ExchangeBloc>(
+            create: (BuildContext context) =>
+                ExchangeBloc(ExchangeRepositoryECB()),
+          ),
+          BlocProvider<CurrencyBloc>(
+            create: (BuildContext context) => CurrencyBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Exhange',
+          theme: ThemeData(
+            primaryColor: Style.colorPrimary,
+            accentColor: Style.colorAccent,
+            disabledColor: Style.colorSubText,
+            backgroundColor: Colors.white,
+            textTheme: Typography.material2018()
+                .englishLike
+                .apply(bodyColor: Style.colorText),
+          ),
+          home: const Home(),
+        ));
   }
 }

@@ -1,13 +1,15 @@
 import 'dart:ui';
 
+import 'package:exchange_rate/bloc/currency/bloc/currency_bloc.dart';
+import 'package:exchange_rate/bloc/exchange/exchange_bloc.dart';
 import 'package:exchange_rate/pages/detail.dart';
 import 'package:exchange_rate/widgets/dot_indicator.dart';
 import 'package:exchange_rate/widgets/page_view_arrows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 
-import '../bloc/exchange_bloc.dart';
 import '../style.dart';
 import '../widgets/currency_item.dart';
 
@@ -36,8 +38,9 @@ class _HomeState extends State<Home> {
               Icons.refresh,
             ),
             onPressed: () {
-              //TODO: finis
-              context.bloc<ExchangeBloc>().add(const GetExchange('USD'));
+              final String currenBase =
+                  context.bloc<CurrencyBloc>().state.currenBase;
+              context.bloc<ExchangeBloc>().add(GetExchange(currenBase));
             }),
         Text(
           error.message,
@@ -51,9 +54,8 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //load exchanges
-    //TODO: finis
-    context.bloc<ExchangeBloc>().add(const GetExchange('USD'));
+    final String currenBase = context.bloc<CurrencyBloc>().state.currenBase;
+    context.bloc<ExchangeBloc>().add(GetExchange(currenBase));
   }
 
   @override
@@ -97,11 +99,12 @@ class ExchangedSliverContent extends StatelessWidget {
 
   final ExchangeLoaded data;
 
-  void goToDetail(BuildContext context, String base) {
+  void goToDetail(BuildContext context, String currency) {
+    final String currenBase = context.bloc<CurrencyBloc>().state.currenBase;
     Navigator.push(
       context,
       MaterialPageRoute<DetailPage>(
-          builder: (BuildContext context) => DetailPage(base)),
+          builder: (BuildContext context) => DetailPage(currenBase, currency)),
     );
   }
 
@@ -145,8 +148,6 @@ class Header extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final List<String> bases = <String>['USD', 'EUR', 'GBP'];
-
   final PageController _controller = PageController(
     initialPage: 0,
   );
@@ -175,45 +176,55 @@ class Header extends StatelessWidget {
                   Style.colorAccent,
                   Style.colorPrimary,
                 ])),
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                PageView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: bases.length,
-                    controller: _controller,
-                    onPageChanged: (int page) {
-                      context
-                          .bloc<ExchangeBloc>()
-                          .add(GetExchange(bases[page]));
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return CurrencyItem(bases[index]);
-                    }),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: PageViewArrows(
-                    controller: _controller,
-                    itemCount: bases.length,
-                    curve: _pageCurve,
-                  ),
-                ),
-                Positioned(
-                    bottom: 16.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(
-                        child: DotsIndicator(
-                          controller: _controller,
-                          itemCount: bases.length,
-                          curve: _pageCurve,
-                        ),
+            child: BlocConsumer<CurrencyBloc, CurrencyState>(
+              listener: (BuildContext context, CurrencyState state) {},
+              buildWhen: (CurrencyState previous, CurrencyState current) =>
+                  listEquals(previous.bases, current.bases),
+              builder: (BuildContext context, CurrencyState state) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: state.bases.length,
+                        controller: _controller,
+                        onPageChanged: (int page) {
+                          context
+                              .bloc<CurrencyBloc>()
+                              .add(CurrencySetIndexEvent(page));
+                          context
+                              .bloc<ExchangeBloc>()
+                              .add(GetExchange(state.currenBase));
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return CurrencyItem(state.bases[index]);
+                        }),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: PageViewArrows(
+                        controller: _controller,
+                        itemCount: state.bases.length,
+                        curve: _pageCurve,
                       ),
-                    ))
-              ],
+                    ),
+                    Positioned(
+                        bottom: 16.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: DotsIndicator(
+                              controller: _controller,
+                              itemCount: state.bases.length,
+                              curve: _pageCurve,
+                            ),
+                          ),
+                        ))
+                  ],
+                );
+              },
             ),
           ),
         ),

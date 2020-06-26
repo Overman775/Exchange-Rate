@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage(this.base, {Key key}) : super(key: key);
+  const DetailPage(this.base, this.currency, {Key key}) : super(key: key);
 
   final String base;
+  final String currency;
 
   @override
   _DetailPageState createState() => _DetailPageState();

@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import '../data/exchange_exeptions.dart';
-import '../data/exchange_repository.dart';
-import '../models/exchange_model.dart';
+import 'package:exchange_rate/data/exchange_exeptions.dart';
+import 'package:exchange_rate/data/exchange_repository.dart';
+import 'package:exchange_rate/models/exchange_model.dart';
 
 part 'exchange_event.dart';
 part 'exchange_state.dart';
