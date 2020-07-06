@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^4.0.0
-  flutter_bloc: ^4.0.1
+  bloc: ^5.0.0
+  flutter_bloc: ^5.0.0
   hive:
   hive_flutter:
     git:

@@ -10,12 +10,9 @@ part 'exchange_event.dart';
 part 'exchange_state.dart';
 
 class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
-  ExchangeBloc(this.repository);
+  ExchangeBloc(this.repository) : super(ExchangeInitial());
 
   final ExchangeRepository repository;
-
-  @override
-  ExchangeState get initialState => ExchangeInitial();
 
   @override
   Stream<ExchangeState> mapEventToState(
