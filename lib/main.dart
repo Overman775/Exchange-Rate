@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/currency/bloc/currency_bloc.dart';
+import 'bloc/currency/currency_bloc.dart';
 import 'bloc/exchange/exchange_bloc.dart';
 import 'data/exchange_repository.dart';
 import 'pages/home.dart';

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:exchange_rate/bloc/currency/bloc/currency_bloc.dart';
+import 'package:exchange_rate/bloc/currency/currency_bloc.dart';
 import 'package:exchange_rate/bloc/exchange/exchange_bloc.dart';
 import 'package:exchange_rate/pages/detail.dart';
 import 'package:exchange_rate/widgets/dot_indicator.dart';
