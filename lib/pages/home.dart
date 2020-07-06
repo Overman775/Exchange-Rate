@@ -124,14 +124,14 @@ class ExchangedSliverContent extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () =>
-                    goToDetail(context, data.exchange.rates[index].key),
+                    goToDetail(context, data.exchange.rates[index].base),
                 splashColor: Style.colorAccent.withOpacity(0.3),
                 highlightColor: Style.colorAccent.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(16.0),
                 child: ListTile(
-                  title: Text(data.exchange.rates[index].key),
-                  trailing:
-                      Text(data.exchange.rates[index].value.toStringAsFixed(3)),
+                  title: Text(data.exchange.rates[index].base),
+                  trailing: Text(
+                      data.exchange.rates[index].currency.toStringAsFixed(3)),
                 ),
               ),
             );
