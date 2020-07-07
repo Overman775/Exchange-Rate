@@ -17,6 +17,14 @@ class ExcahngeRate extends Equatable {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'base': base,
+      'currency': currency,
+      'date': date,
+    };
+  }
+
   final String base;
   final double currency;
   final DateTime date;

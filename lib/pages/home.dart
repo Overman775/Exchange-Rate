@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:exchange_rate/bloc/currency/currency_bloc.dart';
 import 'package:exchange_rate/bloc/exchange/exchange_bloc.dart';
+import 'package:exchange_rate/bloc/exchange_detail/exchange_detail_bloc.dart';
+import 'package:exchange_rate/data/exchange_repository.dart';
 import 'package:exchange_rate/pages/detail.dart';
 import 'package:exchange_rate/widgets/dot_indicator.dart';
 import 'package:exchange_rate/widgets/page_view_arrows.dart';
@@ -104,7 +106,11 @@ class ExchangedSliverContent extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute<DetailPage>(
-          builder: (BuildContext context) => DetailPage(currenBase, currency)),
+          builder: (BuildContext context) => BlocProvider<ExchangeDetailBloc>(
+                create: (BuildContext context) =>
+                    ExchangeDetailBloc(ExchangeRepositoryECB()),
+                child: DetailPage(currenBase, currency),
+              )),
     );
   }
 
